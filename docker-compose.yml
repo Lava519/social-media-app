@@ -1,0 +1,46 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    depends_on:
+      - "mongo"
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "587:587"
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend
+    networks:
+      - social-media-app
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - social-media-app
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "user"
+      MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_INITDB_DATABASE: "social"
+#    volumes:
+#      - ./mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - "27017:27017"
+    networks:
+      - social-media-app
+networks:
+  social-media-app:
+    driver: bridge
+
+

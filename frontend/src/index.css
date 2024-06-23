@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --light-b: #1c283a;
+    --darker-g: #2d394b;
+    --dark-g: #364664;
+    --g: #ccd0d6;
+    --light-g: #c0ccfe;
+    --pale-b: #bad6fd;
+    --pale-r: #fcc3c5;
+    --pale-g: #ccf7e2;
+
+    --input-br: 10px;
+    --input-b: 5px;
+    --input-p: 0.3em;
+    --button-p: 5px 15px;
+    min-width: 360px;
+  }
+  body {
+    background-color: var(--darker-g);
+    color: var(--g);
+  }
+  input {
+    background-color: #bad6fd;
+    color: var(--darker-g);
+    text-align: center;
+    border-radius: var(--input-br);
+    padding: var(--input-p);
+  }
+  input:focus {
+    outline: var(--input-b) solid var(--light-b);
+  }
+  button {
+    background-color: #bad6fd;
+    color: var(--darker-g);
+    text-align: center;
+    border-radius: var(--input-br);
+    padding: var(--button-p);
+    font-weight: 700;
+  }
+  button:focus {
+    outline: var(--input-b) solid var(--light-b);
+  }
+}
