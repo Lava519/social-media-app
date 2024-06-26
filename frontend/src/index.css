@@ -29,6 +29,9 @@
     border-radius: var(--input-br);
     padding: var(--input-p);
   }
+  textarea {
+    resize: none;
+  }
   input:focus {
     outline: var(--input-b) solid var(--light-b);
   }
@@ -42,5 +45,12 @@
   }
   button:focus {
     outline: var(--input-b) solid var(--light-b);
+  }
+  button:hover {
+    transition: scale 0.2s;
+    scale: 1.1;
+  }
+  .non-button:focus {
+    outline: none!important;
   }
 }

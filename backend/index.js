@@ -9,9 +9,11 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static('postImages'));
 
 const userRoutes = require('./routes/userRoutes.js');
 const chatRoutes = require('./routes/chatRoutes.js');
+const postRoutes = require('./routes/postRoutes.js');
 const server = app.listen(3001);
 const wss = new ws.WebSocketServer( {server} );
 const {messageModel} = require('./models/Message.js')
@@ -31,6 +33,7 @@ mongoose.connect(process.env.DB_URL, {
   .then(() => {
     app.use("/user", userRoutes);
     app.use("/chat", chatRoutes);
+    app.use("/post", postRoutes);
     wss.on('connection', (connection, req) =>{
       const cookies = req.headers.cookie?.split('=')[1];
       if (cookies) {

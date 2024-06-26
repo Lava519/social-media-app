@@ -72,21 +72,20 @@ export default function Chat() {
                 ))}
             </div>
             {   selectedUser ?
-                <div className="flex flex-col bg-light-b w-full">
-                <div className="flex-1 overflow-y-scroll p-5">
-                {messages && selectedUser && messages.map((m) => (
-                    <ChatMessage key={m._id} sent={localStorage.getItem('userID') == m.origin} content={m.message} ></ChatMessage>
-                ))}
+                <div className="flex flex-col bg-light-b w-full min-w-60">
+                    <div className="flex-1 overflow-y-scroll p-5">
+                    {messages && selectedUser && messages.map((m) => (
+                        <ChatMessage key={m._id} sent={localStorage.getItem('userID') == m.origin} content={m.message} ></ChatMessage>
+                    ))}
+                    </div>
+                    <form className="flex gap-2 px-5 pb-2" onSubmit={sendMessage}>
+                        <input ref={messageInput} onChange={(e)=>setCurrentMessage(e.target.value)} className="w-full text-left" type="text"></input>
+                        <button type="submit">Send</button>
+                    </form>
+                </div>: 
+                <div className="flex w-full items-center justify-center bg-light-b">
+                    <p>No selected users</p>
                 </div>
-                <form className="flex gap-2 px-5 pb-2" onSubmit={sendMessage}>
-                    <input ref={messageInput} onChange={(e)=>setCurrentMessage(e.target.value)} className="w-full text-left" type="text"></input>
-                    <button type="submit">Send</button>
-                </form>
-
-            </div>: 
-            <div className="flex w-full items-center justify-center bg-light-b">
-                <p>No selected users</p>
-            </div>
             }
 
         </div>
