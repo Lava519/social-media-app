@@ -24,6 +24,12 @@ async function upload(req, res) {
     });
 }
 
+async function getPosts(req, res) {
+    const posts = await postModel.find();
+    res.json(posts);
+}
+
 module.exports = {
-    upload
+    upload,
+    getPosts,
 }

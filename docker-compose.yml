@@ -14,6 +14,8 @@ services:
           path: ./backend
     networks:
       - social-media-app
+    volumes:
+      - social_media_backend_volume:/app
   frontend:
     build:
       context: ./frontend
@@ -42,5 +44,7 @@ services:
 networks:
   social-media-app:
     driver: bridge
+volumes:
+  social_media_backend_volume:
 
 

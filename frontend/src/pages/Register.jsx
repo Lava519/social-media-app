@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "../components/Nav";
+import Loading from "../components/Loading";
 
 export default function Register() {
   const [email, setEmail] = useState(null);
@@ -114,14 +115,7 @@ export default function Register() {
     <div className="flex justify-center h-screen align-stretch relative">
       <Nav></Nav>
       <div className="flex flex-col justify-center items-center overflow-hidden max-h-auto">
-        {loading && (
-          <div className="w-20 h-10 flex justify-center items-center">
-            <img
-              className="animate-[rotate_0.5s_infinite] h-full"
-              src="/loading.svg"
-            />
-          </div>
-        )}
+        <Loading display={loading} ></Loading>
         <form
           className={`check-email flex flex-col justify-center items-center bg-dark-g p-8 rounded-2xl gap-2 ${checkState(0)}`}
         >
