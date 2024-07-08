@@ -6,8 +6,8 @@ export default function Home() {
     return (
         <div className="relative h-screen">
             <Nav></Nav>
-            <Feed></Feed>
             <UploadPost></UploadPost>
+            <Feed></Feed>
         </div>
     )
 }

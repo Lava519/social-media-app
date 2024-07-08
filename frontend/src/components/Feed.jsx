@@ -37,16 +37,13 @@ function Posts({posts, loading}) {
             {
                 posts.map((post)=>{
                     return (
-                        <div>
                             <div key={post._id}>
-                                <div className="overflow-hidden h-96">
-                                    <img className='w-full' src={`http://localhost:3000/${post.image}.jpg`} />
+                                <div className="overflow-hidden w-[400px] h-[500px]">
+                                    <img className='h-full object-cover' src={`http://localhost:3000/${post.image}.jpg`} />
                                 </div>
                                 <p>{post.description}</p>
                                 <p>{post.likes} Likes</p>
                             </div>
-                        </div>
-
                     )
                 })
             }
