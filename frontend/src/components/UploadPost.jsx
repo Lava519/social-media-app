@@ -61,35 +61,54 @@ function ImageCanvas({image}) {
     const CANVAS = {
         w: 400,
         h: 600,
+        zoom: 0.005,
     }
     const srcImage = useRef(null);
-    const [context, setContext] = useState(null)
     const [dragging, setDragging] = useState(false);
     const [scale, setScale] = useState(1);
-    const [srcImageSize, setSrcImageSize] = useState(null);
-    const [srcImageLoc, setSrcImageLoc] = useState({x: 0, y: 0});
+    const [imageSize, setImageSize] = useState(null);
+    const [imageLoc, setImageLoc] = useState({x: 0, y: 0});
+    const [prevMouseLoc, setPrevMouseLoc] = useState(null);
+
+    function moveY(pageY) {
+        let temp =  imageLoc.y - (prevMouseLoc.y - pageY);
+        if (temp > 0)
+            temp = 0;
+        else if (moveY < (Math.floor(imageSize.h*scale)-CANVAS.h)*-1 )
+            temp = (Math.floor(imageSize.h*scale)-CANVAS.h)*-1;
+        return temp;
+    }
+
+    function moveX(pageX) {
+        let temp =  imageLoc.x - (prevMouseLoc.x - pageX);
+        if (temp > 0)
+            temp = 0;
+        else if (temp < (Math.floor(imageSize.w*scale)-CANVAS.w)*-1 )
+            temp = (Math.floor(imageSize.w*scale)-CANVAS.w)*-1
+        return temp;
+    }
+
     useEffect(()=>{
         if (image) {
-            console.log(srcImage.current.width);
-            console.log(srcImage.current.height);
             const canvasContext = canvasImage.current.getContext("2d");
-            canvasContext.drawImage(srcImage.current, srcImageLoc.x, srcImageLoc.y);
-            setContext(canvasContext);
-            setSrcImageSize({w: srcImage.current.width, h: srcImage.current.height});
+            canvasContext.drawImage(srcImage.current, imageLoc.x, imageLoc.y);
+            setImageSize({w: srcImage.current.width, h: srcImage.current.height});
         }
     },[image]);
     const handleScroll = (e) => {
-        const canvasContext = canvasImage.current.getContext("2d");
-        let tScale;
-        if(e.deltaY > 0){
-            tScale = scale+0.1;
-        } else {
-            tScale = scale-0.1;
-        }
-        if (tScale >= 0 && srcImageSize.w*tScale > CANVAS.w && srcImageSize.h*tScale > CANVAS.h ) {
-            canvasContext.clearRect(0, 0, CANVAS.w, CANVAS.h);
-            setScale(tScale);
-            canvasContext.drawImage(srcImage.current, 0, 0, Math.floor(srcImageSize.w*tScale), Math.floor(srcImageSize.h*tScale));
+        if (!dragging) {
+            const canvasContext = canvasImage.current.getContext("2d");
+            let tScale;
+            if(e.deltaY > 0){
+                tScale = scale+CANVAS.zoom;
+            } else {
+                tScale = scale-CANVAS.zoom;
+            }
+            if (tScale >= 0 && imageSize.w*tScale > CANVAS.w && imageSize.h*tScale > CANVAS.h ) {
+                canvasContext.clearRect(0, 0, CANVAS.w, CANVAS.h);
+                setScale(tScale);
+                canvasContext.drawImage(srcImage.current, imageLoc.x, imageLoc.y, Math.floor(imageSize.w*tScale), Math.floor(imageSize.h*tScale));
+            }
         }
     }
     const handleMouseDown = (e) => {
@@ -99,13 +118,30 @@ function ImageCanvas({image}) {
         setDragging(false);
     }
     const handleMouseMove = (e) => {
-        if(dragging)
-            console.log(e);
+        console.log(dragging);
+        setPrevMouseLoc({x: e.pageX, y: e.pageY});
+        if(dragging) {
+            let mX = moveX(e.pageX);
+            let mY = moveY(e.pageY);
+            const canvasContext = canvasImage.current.getContext("2d");
+            console.log(imageLoc);
+            canvasContext.drawImage(srcImage.current, mX, mY, Math.floor(imageSize.w*scale), Math.floor(imageSize.h*scale));
+            setImageLoc({x:mX, y:mY});
+            }
     }
     if (image)
         return (
             <div>
-                <canvas onWheel={handleScroll} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} onMouseDown={handleMouseDown} className='top-0 right-0 left-0 bottom-0 absolute m-auto z-30 w-[400px] h-[500px]' width={CANVAS.w} height={CANVAS.h} ref={canvasImage} ></canvas>
+                <canvas
+                    onWheel={handleScroll}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                    onMouseDown={handleMouseDown}
+                    className='top-0 right-0 left-0 bottom-0 absolute m-auto z-30 w-[400px] h-[500px]'
+                    width={CANVAS.w}
+                    height={CANVAS.h} ref={canvasImage}>
+                </canvas>
                 <img className='hidden' ref={srcImage} src={image}></img>
             </div>
     )
